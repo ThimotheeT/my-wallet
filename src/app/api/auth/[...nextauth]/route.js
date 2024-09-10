@@ -1,5 +1,5 @@
 import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
+import CredentialsProvider from "next-auth/providers/credentials" //Importe auth par informations (email/mdp)
 import bcrypt from "bcrypt"
 import { sql } from '@vercel/postgres';
 
@@ -11,11 +11,12 @@ const handler = NextAuth({
         email: { label: "Email", type: "text" },
         password: { label: "Mot de passe", type: "password" }
       },
+        //Vérification des champs
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null
         }
-
+         //Vérifie si le mail existe
         try {
           const { rows } = await sql`
             SELECT * FROM users WHERE email = ${credentials.email}
@@ -26,20 +27,20 @@ const handler = NextAuth({
           if (!user) {
             return null
           }
-
+           //Compare le mdp et le mdp crypté
           const isPasswordValid = await bcrypt.compare(credentials.password, user.password_hash)
 
           if (!isPasswordValid) {
             return null
           }
-
+           //Auth réussi, renvoi les infos de l'utilisateur
           return {
             id: user.id,
             email: user.email,
             name: user.name
           }
         } catch (error) {
-          console.error('Erreur lors de l\'authentification:', error);
+          console.error('Error during authentication :', error);
           return null
         }
       }
@@ -60,9 +61,11 @@ const handler = NextAuth({
     }
   },
   pages: {
+    //Défini la page de connexion
     signIn: '/login',
   },
   session: {
+    //Utilise des JsonWebToken pour les sessions
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,

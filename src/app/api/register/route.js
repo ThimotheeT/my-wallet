@@ -7,7 +7,7 @@ export async function POST(req) {
 
     // Vérification des champs requis
     if (!name || !email || !password) {
-      return new Response(JSON.stringify({ error: "Tous les champs sont requis" }), {
+      return new Response(JSON.stringify({ error: "All fields are required." }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
@@ -16,7 +16,7 @@ export async function POST(req) {
     // Vérification si l'utilisateur existe déjà
     const { rows } = await sql`SELECT * FROM users WHERE email = ${email}`;
     if (rows.length > 0) {
-      return new Response(JSON.stringify({ error: "Cet email est déjà utilisé" }), {
+      return new Response(JSON.stringify({ error: "This email is already in use." }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
@@ -31,14 +31,15 @@ export async function POST(req) {
       VALUES (${name}, ${email}, ${hashedPassword})
     `;
 
-    return new Response(JSON.stringify({ message: "Utilisateur créé avec succès" }), {
+    return new Response(JSON.stringify({ message: "User created successfully." }), {
       status: 201,
       headers: { 'Content-Type': 'application/json' },
     });
-
+  
+    // Gestion des erreurs
   } catch (error) {
-    console.error('Erreur lors de l\'inscription:', error);
-    return new Response(JSON.stringify({ error: "Une erreur est survenue lors de l'inscription" }), {
+    console.error('Error during registration :', error);
+    return new Response(JSON.stringify({ error: "An error occurred during registration." }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
