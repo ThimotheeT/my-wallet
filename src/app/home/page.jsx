@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -22,6 +23,7 @@ export default function Home() {
       {session && (
         <div>
           <p>Bonjour, {session.user.name} !</p> {/* Affiche le pseudo de l'utilisateur */}
+          <Link href='/profile'>Profil</Link>
           <button onClick={() => signOut()}>Se déconnecter</button> {/* Bouton de déconnexion */}
         </div>
       )}
