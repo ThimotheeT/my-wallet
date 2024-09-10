@@ -74,3 +74,77 @@ Les contributions sont les bienvenues ! Si vous souhaitez contribuer à ce proje
 ## Contributions
 
 Ce projet est sous licence MIT. Consultez le fichier LICENSE pour plus de détails.
+
+
+
+# My Wallet
+
+My Wallet is a web application for portfolio management that allows users to sign up, log in, and manage their personal finances. This application uses Next.js for the frontend and NextAuth.js for authentication.
+
+## Table of Contents
+
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Contributions](#contributions)
+- [License](#license)
+
+## Features
+
+- User registration and login
+- Session management with NextAuth.js
+- Responsive user interface
+- Automatic redirection after login and logout
+
+## Technologies Used
+
+- [Next.js](https://nextjs.org/) - React framework for web application development
+- [NextAuth.js](https://next-auth.js.org/) - Authentication solution for Next.js
+- [PostgreSQL](https://www.postgresql.org/) - Relational database management system
+- [Vercel](https://vercel.com/) - Deployment platform for Next.js applications
+
+## Installation
+
+1. Clone the repository:
+   git clone https://github.com/ThimotheeT/my-wallet.git
+
+2. Navigate to the project directory:
+   cd my-wallet
+
+3. Install the dependencies:
+   npm install
+
+## Configuration
+
+Create a .env file at the root of the project and add the following environment variables:
+
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=YourSecretKey
+DATABASE_URL=postgres://user:password@localhost:5432/your_database_name
+
+Replace user, password, and your_database_name with your PostgreSQL connection information. Run the database migrations if necessary.
+
+## Usage
+
+1. Start the development server:
+   npm run dev
+
+2. Open your browser and go to http://localhost:3000.
+
+3. Sign up or log in to start using the application.
+
+## Contributions
+
+Contributions are welcome! If you would like to contribute to this project, please follow these steps:
+
+1. Fork the project.
+2. Create a new branch (git checkout -b feature/feature-name).
+3. Make your changes and commit them (git commit -m 'Add a new feature').
+4. Push your changes (git push origin feature/feature-name).
+5. Open a Pull Request.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for more details.
