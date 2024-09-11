@@ -25,10 +25,13 @@ export async function POST(req) {
     // Hachage du mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // URL de l'image par défaut
+    const defaultProfilePictureUrl = '/images/icone-de-profil-utilisateur.jpg';
+
     // Insertion du nouvel utilisateur
     await sql`
-      INSERT INTO users (name, email, password_hash)
-      VALUES (${name}, ${email}, ${hashedPassword})
+      INSERT INTO users (name, email, password_hash, profile_picture_url)
+      VALUES (${name}, ${email}, ${hashedPassword}, ${defaultProfilePictureUrl})
     `;
 
     return new Response(JSON.stringify({ message: "User created successfully." }), {

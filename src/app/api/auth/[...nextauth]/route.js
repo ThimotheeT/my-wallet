@@ -37,7 +37,8 @@ const handler = NextAuth({
           return {
             id: user.id,
             email: user.email,
-            name: user.name
+            name: user.name,
+            profile_picture_url: user.profile_picture_url
           }
         } catch (error) {
           console.error('Error during authentication :', error);
@@ -49,13 +50,15 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
+        token.id = user.id;
+        token.profile_picture_url = user.profile_picture_url;
       }
       return token
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id
+        session.user.id = token.id;
+        session.user.profile_picture_url = token.profile_picture_url;
       }
       return session
     }
