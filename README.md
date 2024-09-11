@@ -29,13 +29,13 @@ My Wallet est une application web de gestion de portefeuille qui permet aux util
 ## Installation
 
 1. Clonez le dépôt :
-   git clone https://github.com/ThimotheeT/my-wallet.git
+   'git clone https://github.com/ThimotheeT/my-wallet.git'
 
 2. Accédez au répertoire du projet :
-   cd my-wallet
+   'cd my-wallet'
 
 3. Installez les dépendances :
-   npm install
+   'npm install'
 
 ## Configuration
 
@@ -51,7 +51,7 @@ Exécutez les migrations de la base de données si nécessaire.
 ## Utilisation
 
 1. Démarrez le serveur de développement :
-    npm run dev
+    'npm run dev'
 
 2. Ouvrez votre navigateur et accédez à http://localhost:3000.
 
@@ -63,15 +63,15 @@ Les contributions sont les bienvenues ! Si vous souhaitez contribuer à ce proje
 
 1. Forkez le projet.
 
-2. Créez une nouvelle branche (git checkout -b feature/nom-de-la-fonctionnalité).
+2. Créez une nouvelle branche ('git checkout -b feature/nom-de-la-fonctionnalité').
 
-3. Apportez vos modifications et validez-les (git commit -m 'Ajout d'une nouvelle fonctionnalité').
+3. Apportez vos modifications et validez-les ('git commit -m "Ajout d'une nouvelle fonctionnalité"').
 
-4. Poussez vos modifications (git push origin feature/nom-de-la-fonctionnalité).
+4. Poussez vos modifications ('git push origin feature/nom-de-la-fonctionnalité').
 
 5. Ouvrez une Pull Request.
 
-## Contributions
+## Licence
 
 Ce projet est sous licence MIT. Consultez le fichier LICENSE pour plus de détails.
 
@@ -108,13 +108,13 @@ My Wallet is a web application for portfolio management that allows users to sig
 ## Installation
 
 1. Clone the repository:
-   git clone https://github.com/ThimotheeT/my-wallet.git
+   'git clone https://github.com/ThimotheeT/my-wallet.git'
 
 2. Navigate to the project directory:
-   cd my-wallet
+   'cd my-wallet'
 
 3. Install the dependencies:
-   npm install
+   'npm install'
 
 ## Configuration
 
@@ -129,7 +129,7 @@ Replace user, password, and your_database_name with your PostgreSQL connection i
 ## Usage
 
 1. Start the development server:
-   npm run dev
+   'npm run dev'
 
 2. Open your browser and go to http://localhost:3000.
 
@@ -140,9 +140,13 @@ Replace user, password, and your_database_name with your PostgreSQL connection i
 Contributions are welcome! If you would like to contribute to this project, please follow these steps:
 
 1. Fork the project.
-2. Create a new branch (git checkout -b feature/feature-name).
-3. Make your changes and commit them (git commit -m 'Add a new feature').
-4. Push your changes (git push origin feature/feature-name).
+
+2. Create a new branch ('git checkout -b feature/feature-name').
+
+3. Make your changes and commit them ('git commit -m "Add a new feature"').
+
+4. Push your changes ('git push origin feature/feature-name').
+
 5. Open a Pull Request.
 
 ## License

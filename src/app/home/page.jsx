@@ -19,12 +19,12 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Bienvenue sur la page d'accueil</h1>
+      <h1>Welcome to the homepage</h1>
       {session && (
         <div>
-          <p>Bonjour, {session.user.name} !</p> {/* Affiche le pseudo de l'utilisateur */}
-          <Link href='/profile'>Profil</Link>
-          <button onClick={() => signOut()}>Se déconnecter</button> {/* Bouton de déconnexion */}
+          <p>Hello, {session.user.name} !</p> {/* Affiche le pseudo de l'utilisateur */}
+          <Link href='/profile'>{session.user.name}'s profile</Link>
+          <button onClick={() => signOut()}>Log out</button>
         </div>
       )}
     </div>

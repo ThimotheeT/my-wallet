@@ -6,8 +6,8 @@ const Welcome = () => {
     <div>
       <h1>Welcome</h1>
       <div>
-        <Link href="/registration">Registration</Link>
-        <Link href="/login">Login</Link>
+        <Link href="/registration">Sign up</Link>
+        <Link href="/login">Log in</Link>
       </div>
     </div>
   );
