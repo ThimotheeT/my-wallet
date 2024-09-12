@@ -1,36 +1,34 @@
 import { sql } from '@vercel/postgres';
 
+ //Récupere le portefeuille de l'utilisateur
 export async function GET(req) {
     const userId = req.nextUrl.searchParams.get('userId');
   
     if (!userId) {
-      return new Response(JSON.stringify({ error: 'userId est requis' }), { status: 400 });
+       //Vérifie si l'id est fourni
+      return new Response(JSON.stringify({ error: 'userId is required' }), { status: 400 });
     }
   
     try {
-      // Ajoutez un log pour voir quel userId est utilisé
-      console.log("Fetching wallet for userId:", userId);
-      
+       //Récupere le portefeuille
       const wallet = await sql`SELECT * FROM wallets WHERE user_id = ${userId}`;
-      
-      // Log de la réponse de la requête SQL
-      console.log("Wallet Query Result:", wallet);
   
       if (wallet.length === 0) {
-        return new Response(JSON.stringify({ error: 'Aucun portefeuille trouvé' }), { status: 404 });
+        return new Response(JSON.stringify({ error: 'No wallet found' }), { status: 404 });
       }
       return new Response(JSON.stringify({ wallet: wallet.rows[0] }), { status: 200 });
     } catch (error) {
-      console.error('Erreur lors de la récupération du portefeuille:', error); // Ajoutez un log d'erreur
-      return new Response(JSON.stringify({ error: 'Échec de la récupération du portefeuille' }), { status: 500 });
+      console.error('Error retrieving wallet :', error); // Ajoutez un log d'erreur
+      return new Response(JSON.stringify({ error: 'Failed to retrieve wallet' }), { status: 500 });
     }
   }
-
+ 
+  //Crée et met a jour le portefeuille
 export async function POST(req) {
   const { userId, balance } = await req.json();
 
   if (!userId || balance === undefined) {
-    return new Response(JSON.stringify({ error: 'userId et balance sont requis' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'userId and balance are required' }), { status: 400 });
   }
 
   try {
@@ -41,15 +39,16 @@ export async function POST(req) {
     const newWallet = await sql`INSERT INTO wallets (user_id, balance) VALUES (${userId}, ${balance}) RETURNING *`;
     return new Response(JSON.stringify({ wallet: newWallet[0] }), { status: 201 });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Échec de l\'ajout du portefeuille' }), { status: 500 });
+    return new Response(JSON.stringify({ error: 'Failed to add wallet' }), { status: 500 });
   }
 }
 
+ //Supprime le portefeuille
 export async function DELETE(req) {
     const { userId } = await req.json();
   
     if (!userId) {
-      return new Response(JSON.stringify({ error: 'userId est requis' }), { status: 400 });
+      return new Response(JSON.stringify({ error: 'userId is required' }), { status: 400 });
     }
   
     try {
@@ -57,12 +56,12 @@ export async function DELETE(req) {
       const result = await sql`DELETE FROM wallets WHERE user_id = ${userId}`;
       
       if (result.rowCount === 0) {
-        return new Response(JSON.stringify({ error: 'Aucun portefeuille trouvé à supprimer' }), { status: 404 });
+        return new Response(JSON.stringify({ error: 'No wallet found to delete' }), { status: 404 });
       }
   
-      return new Response(JSON.stringify({ message: 'Portefeuille supprimé avec succès' }), { status: 200 });
+      return new Response(JSON.stringify({ message: 'Wallet deleted successfully' }), { status: 200 });
     } catch (error) {
-      console.error('Erreur lors de la suppression du portefeuille:', error);
-      return new Response(JSON.stringify({ error: 'Échec de la suppression du portefeuille' }), { status: 500 });
+      console.error('Error deleting wallet :', error);
+      return new Response(JSON.stringify({ error: 'Failed to delete wallet' }), { status: 500 });
     }
   }
