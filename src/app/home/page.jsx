@@ -1,21 +1,22 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import WalletChart from '../components/WalletChart';
+import WalletDisplay from '../components/WalletDisplay';
+import AddWallet from '../components/AddWallet';
+import UserInfo from '../components/UserInfo';
 
 export default function Home() {
+   // Récupération des données de session et du statut d'authentification
   const { data: session, status } = useSession();
   const router = useRouter();
   
+   // États pour le wallet et les messages
   const [wallet, setWallet] = useState(null);
-  const [balance, setBalance] = useState(0); // État pour le solde du portefeuille
-  const [amountToAdd, setAmountToAdd] = useState(0); // État pour le montant à ajouter
-  const [message, setMessage] = useState(''); // État pour les messages d'erreur ou de succès
+  const [message, setMessage] = useState('');
 
-   //Vérifie le chargement, vérifie l'auth et renvoi sur l'accueil si pas auth, sinon fetch les infos wallet
+   // Effet pour gérer la redirection et le chargement initial du wallet
   useEffect(() => {
     if (status === 'loading') return;
     if (!session) {
@@ -25,7 +26,14 @@ export default function Home() {
     }
   }, [session, status, router]);
 
-   //Récupere le portefeuille du user et met a jour
+   // Effet pour recharger le wallet si celui-ci est null
+  useEffect(() => {
+    if (!wallet) {
+      fetchWallet();
+    }
+  }, [wallet]);
+
+   // Fonction pour récupérer les données du wallet depuis l'API
   const fetchWallet = async () => {
     const response = await fetch(`/api/wallets?userId=${session.user.id}`);
     if (response.ok) {
@@ -36,124 +44,33 @@ export default function Home() {
     }
   };
 
-   //Creer un nouveau portefeuille avec solde
-  const handleAddWallet = async () => {
-    const response = await fetch('/api/wallets', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: session.user.id,
-        balance: balance,
-      }),
-    });
-
-    if (response.ok) {
-      await fetchWallet(); // Récupérez le portefeuille mis à jour
-      setMessage('Wallet added successfully!');
-      setBalance(0); // Réinitialiser le champ de solde
-    } else {
-      const errorData = await response.json();
-      setMessage(`Error: ${errorData.error}`);
-    }
-  };
-
-  //Ajouter des fonds au wallet
-  const handleAddFunds = async () => {
-    if (!wallet) {
-      setMessage('No wallet found to add funds.');
-      return;
-    }
-
-    const description = `Added ${amountToAdd} € to wallet`; // Créez une description pour la transaction
-
-    // Mettez à jour la table des transactions
-    const response = await fetch('/api/transactions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        walletId: wallet.id, // Assurez-vous que vous avez l'ID du portefeuille
-        amount: amountToAdd,
-        type: 'deposit', // Type de transaction
-        description,
-      }),
-    });
-
-    if (response.ok) {
-      await fetchWallet(); // Récupérez le portefeuille mis à jour
-      setMessage('Funds added successfully!');
-      setAmountToAdd(0); // Réinitialiser le champ de montant
-    } else {
-      const errorData = await response.json();
-      setMessage(`Error: ${errorData.error}`);
-    }
-  };
-
-   //Permet de delete le wallet
-  const handleResetWallet = async () => {
-    if (!wallet) {
-      setMessage('No wallet to reset.');
-      return;
-    }
-
-    // Supprimez le portefeuille existant
-    const response = await fetch('/api/wallets', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: session.user.id,
-      }),
-    });
-
-    if (response.ok) {
-      setMessage('Wallet deleted successfully. You can create a new one.');
-      setWallet(null); // Réinitialiser l'état du portefeuille
-    } else {
-      const errorData = await response.json();
-      setMessage(`Error deleting wallet: ${errorData.error}`);
-    }
-  };
-
   return (
     <div>
       <h1>Welcome to the homepage</h1>
       {session && (
-        <div>
-          <p>Hello, {session.user.name}!</p>
+        <>
+        {/* Affichage des informations de l'utilisateur */}
+          <UserInfo session={session} />
+          {/* Affichage du wallet ou du formulaire d'ajout de wallet */}
           {wallet ? (
-            <div>
-              <h2>Wallet balance: {wallet.balance} €</h2>
-              <WalletChart balance={wallet.balance} />
-              <input
-                type="number"
-                placeholder="Amount to add"
-                value={amountToAdd}
-                onChange={(e) => setAmountToAdd(Number(e.target.value))}
-              />
-              <button onClick={handleAddFunds}>Add Funds</button>
-              <button onClick={handleResetWallet}>Reset wallet</button>
-            </div>
+            <WalletDisplay 
+              session={session}
+              wallet={wallet} 
+              setWallet={setWallet}
+              fetchWallet={fetchWallet} 
+              setMessage={setMessage} 
+            />
           ) : (
-            <div>
-              <h2>Add a new wallet</h2>
-              <input
-                type="number"
-                placeholder="Initial balance"
-                value={balance}
-                onChange={(e) => setBalance(Number(e.target.value))}
-              />
-              <button onClick={handleAddWallet}>Add the wallet</button>
-            </div>
+            <AddWallet 
+              session={session} 
+              fetchWallet={fetchWallet} 
+              setMessage={setMessage} 
+            />
           )}
-          <p>{message}</p> {/* Affiche le message de succès ou d'erreur */}
-          <Link href='/profile'>{session.user.name}'s profile</Link>
-          <button onClick={() => signOut()}>Log out</button>
-        </div>
+
+           {/* Affichage des messages */}
+          <p>{message}</p>
+        </>
       )}
     </div>
   );
