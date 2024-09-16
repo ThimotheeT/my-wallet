@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { FaPen, FaEnvelope, FaLock } from "react-icons/fa";
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -38,29 +39,47 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <h1>Log in</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-        />
-        <button type="submit" disabled={isLoading}>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-whiteBrand p-4">
+      <h1 className="sm:text-6xl text-5xl font-bold mb-20 text-greenBrand">Log in</h1>
+      <form onSubmit={handleSubmit} className="w-full max-w-md">
+        <div className="mb-4">
+          <div className="flex items-center bg-gray-800 rounded px-3 py-2">
+            <FaEnvelope className="text-greenBrand mr-2" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              required
+              className="bg-transparent w-full focus:outline-none"
+            />
+          </div>
+        </div>
+        <div className="mb-6">
+          <div className="flex items-center bg-gray-800 rounded px-3 py-2">
+            <FaLock className="text-greenBrand mr-2" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              required
+              className="bg-transparent w-full focus:outline-none"
+            />
+          </div>
+        </div>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full sm:text-2xl text-xl mt-10 bg-greenBrand text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300 mb-4"
+        >
           {isLoading ? 'Loading...' : 'Log in'}
         </button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <Link href="/registration">Don't have an account yet? Sign up</Link>
+      {error && <p className="text-red-500 mb-4">{error}</p>}
+      <Link href="/registration" className="flex items-center text-greenBrand hover:text-green-400 transition duration-300">
+        Don't have an account yet? Sign up <FaPen className="ml-2" />
+      </Link>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
+import { CgProfile } from "react-icons/cg";
 
  // Composant pour afficher les informations de l'utilisateur et les options de navigation
 export default function UserInfo({ session }) {
@@ -8,7 +9,7 @@ export default function UserInfo({ session }) {
       <p>Hello, {session.user.name}!</p>
 
       {/* Lien vers la page de profil de l'utilisateur */}
-      <Link href='/profile'>{session.user.name}'s profile</Link>
+      <Link href='/profile'>{session.user.name}'s profile</Link><CgProfile />
       
       <button onClick={() => signOut()}>Log out</button>
     </div>

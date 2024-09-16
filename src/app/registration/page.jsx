@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 
 export default function Registration() {
   const [name, setName] = useState('');
@@ -51,38 +52,60 @@ export default function Registration() {
   };
 
   return (
-    <div>
-      <h1>Sign up</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Name"
-          required
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-whiteBrand p-4">
+      <h1 className="sm:text-6xl text-5xl font-bold mb-20 text-greenBrand">Sign up</h1>
+      <form onSubmit={handleSubmit} className="w-full max-w-md">
+        <div className="mb-4">
+          <div className="flex items-center bg-gray-800 rounded px-3 py-2">
+            <FaUser className="text-greenBrand mr-2" />
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Name"
+              required
+              disabled={isLoading}
+              className="bg-transparent w-full focus:outline-none"
+            />
+          </div>
+        </div>
+        <div className="mb-4">
+          <div className="flex items-center bg-gray-800 rounded px-3 py-2">
+            <FaEnvelope className="text-greenBrand mr-2" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              required
+              disabled={isLoading}
+              className="bg-transparent w-full focus:outline-none"
+            />
+          </div>
+        </div>
+        <div className="mb-6">
+          <div className="flex items-center bg-gray-800 rounded px-3 py-2">
+            <FaLock className="text-greenBrand mr-2" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              required
+              disabled={isLoading}
+              className="bg-transparent w-full focus:outline-none"
+            />
+          </div>
+        </div>
+        <button
+          type="submit"
           disabled={isLoading}
-        />
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-          disabled={isLoading}
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-          disabled={isLoading}
-        />
-        <button type="submit" disabled={isLoading}>
+          className="w-full sm:text-2xl text-xl mt-10 bg-greenBrand text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300"
+        >
           {isLoading ? "Loading..." : "Sign up"}
         </button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="mt-4 text-red-500">{error}</p>}
     </div>
   );
 }
