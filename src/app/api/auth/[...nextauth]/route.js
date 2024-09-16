@@ -1,77 +1,84 @@
-import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials" //Importe auth par informations (email/mdp)
-import bcrypt from "bcrypt"
-import { sql } from '@vercel/postgres';
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials"; //Importe auth par informations (email/mdp)
+import bcrypt from "bcrypt";
+import { sql } from "@vercel/postgres";
 
+// Config NextAuth
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
-      name: 'Credentials',
+      name: "Credentials", // Nom fournisseur auth
       credentials: {
         email: { label: "Email", type: "text" },
-        password: { label: "Mot de passe", type: "password" }
+        password: { label: "Mot de passe", type: "password" },
       },
-        //Vérification des champs
+      //Vérification des champs
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null
+          return null;
         }
-         //Vérifie si le mail existe
+        //Vérifie si le mail existe
         try {
           const { rows } = await sql`
             SELECT * FROM users WHERE email = ${credentials.email}
           `;
 
-          const user = rows[0];
+          const user = rows[0]; // Récupère l'utilisateur correspondant à l'email
 
           if (!user) {
-            return null
+            return null;
           }
-           //Compare le mdp et le mdp crypté
-          const isPasswordValid = await bcrypt.compare(credentials.password, user.password_hash)
+          //Compare le mdp et le mdp crypté
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password_hash
+          );
 
           if (!isPasswordValid) {
-            return null
+            return null;
           }
-           //Auth réussi, renvoi les infos de l'utilisateur
+          //Auth réussi, renvoi les infos de l'utilisateur
           return {
             id: user.id,
             email: user.email,
             name: user.name,
-            profile_picture_url: user.profile_picture_url
-          }
+            profile_picture_url: user.profile_picture_url,
+          };
         } catch (error) {
-          console.error('Error during authentication :', error);
-          return null
+          console.error("Error during authentication :", error); // Log d'erreur en cas de problème
+          return null;
         }
-      }
+      },
     }),
   ],
   callbacks: {
+    // Callback pour le JWT (JSON Web Token)
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.profile_picture_url = user.profile_picture_url;
+        token.id = user.id; // Ajoute l'ID de l'utilisateur au token
+        token.profile_picture_url = user.profile_picture_url; // Ajoute l'URL de la photo de profil au token
       }
-      return token
+      return token;
     },
+    // Callback pour la session
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id;
-        session.user.profile_picture_url = token.profile_picture_url;
+        session.user.id = token.id; // Ajoute l'ID de l'utilisateur à la session
+        session.user.profile_picture_url = token.profile_picture_url; // Ajoute l'URL de la photo de profil à la session
       }
-      return session
-    }
+      return session;
+    },
   },
   pages: {
     //Défini la page de connexion
-    signIn: '/login',
+    signIn: "/login",
   },
   session: {
     //Utilise des JsonWebToken pour les sessions
     strategy: "jwt",
   },
-  secret: process.env.NEXTAUTH_SECRET,
-})
+  secret: process.env.NEXTAUTH_SECRET, // Clé secrète pour signer les tokens
+});
 
-export { handler as GET, handler as POST }
+// Exporte le handler pour les requêtes GET et POST
+export { handler as GET, handler as POST };
