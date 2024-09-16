@@ -53,10 +53,14 @@ const handler = NextAuth({
   ],
   callbacks: {
     // Callback pour le JWT (JSON Web Token)
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id; // Ajoute l'ID de l'utilisateur au token
         token.profile_picture_url = user.profile_picture_url; // Ajoute l'URL de la photo de profil au token
+      }
+      // Gère la mise à jour du token
+      if (trigger === "update" && session?.user?.profile_picture_url) {
+        token.profile_picture_url = session.user.profile_picture_url;
       }
       return token;
     },
