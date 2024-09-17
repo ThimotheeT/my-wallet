@@ -1,6 +1,6 @@
-# My Wallet
+# My Wallet V1
 
-My Wallet est une application web de gestion de portefeuille qui permet aux utilisateurs de s'inscrire, de se connecter et de gérer leurs finances personnelles. Cette application utilise Next.js pour le frontend et NextAuth.js pour l'authentification.
+My Wallet est une application web de gestion de portefeuille qui permet aux utilisateurs de s'inscrire, de se connecter et de gérer leurs finances personnelles. Cette application utilise Next.js et NextAuth.js pour l'authentification.
 
 ## Table des matières
 
@@ -18,6 +18,7 @@ My Wallet est une application web de gestion de portefeuille qui permet aux util
 - Gestion des sessions avec NextAuth.js
 - Interface utilisateur réactive
 - Redirection automatique après la connexion et la déconnexion
+- Gestion du portefeuille, ajout, retrait, reset
 
 ## Technologies utilisées
 
@@ -77,9 +78,9 @@ Ce projet est sous licence MIT. Consultez le fichier LICENSE pour plus de détai
 
 
 
-# My Wallet
+# My Wallet V1
 
-My Wallet is a web application for portfolio management that allows users to sign up, log in, and manage their personal finances. This application uses Next.js for the frontend and NextAuth.js for authentication.
+My Wallet is a web application for portfolio management that allows users to sign up, log in, and manage their personal finances. This application uses Next.js and NextAuth.js for authentication.
 
 ## Table of Contents
 
@@ -97,6 +98,7 @@ My Wallet is a web application for portfolio management that allows users to sig
 - Session management with NextAuth.js
 - Responsive user interface
 - Automatic redirection after login and logout
+- Wallet management, add funds, withdraw funds, reset wallet
 
 ## Technologies Used
 
