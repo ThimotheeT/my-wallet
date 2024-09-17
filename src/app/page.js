@@ -11,7 +11,8 @@ const Welcome = () => {
         <h1 className="sm:text-6xl text-4xl font-bold sm:mb-20 mb-20 flex items-center justify-center text-greenBrand">
           MY WALLET <IoWallet className="ml-2" />
         </h1>
-        <h2 className="sm:text-4xl text-2xl sm:mb-20 mb-12 font-semibold">WELCOME !</h2>
+        <p className="sm:text-2xl text-xl font-semibold">Take control of your finances :</p>
+        <p className="sm:text-2xl text-xl sm:mb-20 mb-12 font-semibold">Manage and visualize your expenses with ease !</p>
       </div>
       <div className="flex flex-col sm:text-2xl text-xl sm:flex-row space-y-8 sm:space-y-0 sm:space-x-12">
         <Link href="/registration" className="flex items-center justify-center bg-greenBrand text-white px-4 py-2 rounded hover:bg-green-700 transition duration-300">

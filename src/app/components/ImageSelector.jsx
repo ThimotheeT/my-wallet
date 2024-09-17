@@ -1,8 +1,12 @@
 import Image from 'next/image';
 
 const profileImages = [
-  '/images/image-1.webp',
-  '/images/image-2.jpg',
+  '/images/user-1.jpg',
+  '/images/user-2.jpg',
+  '/images/user-3.jpg',
+  '/images/user-4.jpg',
+  '/images/user-5.jpg',
+  '/images/user-6.jpg',
 ];
 
 export default function ImageSelector({ onSelect }) {

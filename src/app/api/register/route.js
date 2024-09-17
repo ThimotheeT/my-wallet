@@ -34,7 +34,7 @@ export async function POST(req) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // URL de l'image par défaut
-    const defaultProfilePictureUrl = "/images/icone-de-profil-utilisateur.jpg";
+    const defaultProfilePictureUrl = "/images/user-1.jpg";
 
     // Insertion du nouvel utilisateur
     await sql`

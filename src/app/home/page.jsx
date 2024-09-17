@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import WalletDisplay from '../components/WalletDisplay';
 import AddWallet from '../components/AddWallet';
 import UserInfo from '../components/UserInfo';
+import { IoWallet } from "react-icons/io5";
 
 export default function Home() {
    // Récupération des données de session et du statut d'authentification
@@ -45,32 +46,34 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <h1>Welcome to the homepage</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-whiteBrand p-4">
+      <h1 className="sm:text-5xl text-3xl font-bold mb-8 flex items-center justify-center text-greenBrand">
+        MY WALLET <IoWallet className="ml-2" />
+      </h1>
       {session && (
-        <>
-        {/* Affichage des informations de l'utilisateur */}
+        <div className="w-full max-w-4xl">
           <UserInfo session={session} />
-          {/* Affichage du wallet ou du formulaire d'ajout de wallet */}
-          {wallet ? (
-            <WalletDisplay 
-              session={session}
-              wallet={wallet} 
-              setWallet={setWallet}
-              fetchWallet={fetchWallet} 
-              setMessage={setMessage} 
-            />
-          ) : (
-            <AddWallet 
-              session={session} 
-              fetchWallet={fetchWallet} 
-              setMessage={setMessage} 
-            />
+          <div className="bg-gray-900 rounded-lg p-6 mt-8">
+            {wallet ? (
+              <WalletDisplay 
+                session={session}
+                wallet={wallet} 
+                setWallet={setWallet}
+                fetchWallet={fetchWallet} 
+                setMessage={setMessage} 
+              />
+            ) : (
+              <AddWallet 
+                session={session} 
+                fetchWallet={fetchWallet} 
+                setMessage={setMessage} 
+              />
+            )}
+          </div>
+          {message && (
+            <p className="mt-4 text-center text-greenBrand">{message}</p>
           )}
-
-           {/* Affichage des messages */}
-          <p>{message}</p>
-        </>
+        </div>
       )}
     </div>
   );

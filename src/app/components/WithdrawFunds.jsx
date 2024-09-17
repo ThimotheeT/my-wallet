@@ -1,24 +1,21 @@
 import { useState } from 'react';
+import { IoRemoveCircleOutline } from "react-icons/io5";
 
- // Composant pour retirer des fonds au wallet
 export default function WithdrawFunds({ wallet, fetchWallet, setMessage }) {
-   // Variable pour stocké le montant
   const [amountToWithdraw, setAmountToWithdraw] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-   // Fonction pour gerer le retrait
   const handleWithdrawFunds = async () => {
-     // Vérifie si le wallet existe
-    if (!wallet) {
-        setMessage('No wallet found to withdraw funds.');
-        return;
-      }
-       
-       // Convertir le montant en nombre positif
+    if (!wallet || isLoading) {
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
       const withdrawAmount = Math.abs(Number(amountToWithdraw));
-       // Créez une description pour la transaction
       const description = `Withdrawn ${withdrawAmount} € from wallet`;
     
-       // Envoyer une requête POST à l'API pour effectuer le retrait
       const response = await fetch('/api/transactions', {
         method: 'POST',
         headers: {
@@ -33,33 +30,51 @@ export default function WithdrawFunds({ wallet, fetchWallet, setMessage }) {
         }),
       });
     
-       // Gérer la réponse de l'API
       if (response.ok) {
-        await fetchWallet(); // Maj data wallet
+        await fetchWallet();
         setMessage('Funds withdrawn successfully!');
-        setAmountToWithdraw(''); // Reset le champ de montant
+        setAmountToWithdraw('');
       } else {
         const errorData = await response.json();
         setMessage(`Error: ${errorData.error}`);
       }
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div>
-      <input
-        type="number"
-        placeholder="Amount to withdraw"
-        value={amountToWithdraw}
-        onChange={(e) => {
-          const value = e.target.value;
-           // Vérifie que la valeur est vide ou négative
-          if (value === '' || Number(value) < 0) {
-            setAmountToWithdraw(value);
-          }
-        }}
-        max="0"
-      />
-      <button onClick={handleWithdrawFunds}>Withdraw Funds</button>
+    <div className="flex flex-col space-y-4">
+      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+        <input
+          type="number"
+          placeholder="Amount to withdraw"
+          value={amountToWithdraw}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (value === '' || Number(value) > 0) {
+              setAmountToWithdraw(value);
+            }
+          }}
+          min="0"
+          disabled={isLoading}
+          className="w-full sm:w-2/3 px-4 py-2 bg-gray-800 text-whiteBrand rounded focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50"
+        />
+        <button 
+          onClick={handleWithdrawFunds}
+          disabled={isLoading}
+          className="w-full sm:w-1/3 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isLoading ? (
+            <span className="animate-spin mr-2">&#9696;</span>
+          ) : (
+            <IoRemoveCircleOutline className="mr-2" style={{ fontSize: '14px' }} />
+          )}
+          {isLoading ? 'Removing...' : 'Remove'}
+        </button>
+      </div>
     </div>
   );
 }

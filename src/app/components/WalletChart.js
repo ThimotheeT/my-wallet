@@ -10,8 +10,8 @@ const WalletChart = ({ balance, withdrawnFunds }) => {
   const safeWithdrawnFunds = withdrawnFunds || 0; // Utilise 0 si withdrawnFunds est null ou undefined
 
    // Définition des couleurs en fonction du solde (positif ou négatif)
-  const balanceColor = totalBalance >= 0 ? "#36A2EB" : "#FF9800";
-  const balanceHoverColor = totalBalance >= 0 ? "#2196F3" : "#F57C00";
+  const balanceColor = totalBalance >= 0 ? "#00AD85": "#DC2626";
+  const balanceHoverColor = totalBalance >= 0 ? "#16A34A" : "#FF4757";
 
    // Initialisation des tableaux pour stocker les données du graphique
   const chartData = [];
@@ -29,7 +29,7 @@ const WalletChart = ({ balance, withdrawnFunds }) => {
    // Ajout des données des fonds retirés
   if (safeWithdrawnFunds > 0) {
     chartData.push(safeWithdrawnFunds);
-    chartColors.push("#FF6384"); // Couleur pour les fonds retirés
+    chartColors.push("#DC2626"); // Couleur pour les fonds retirés
     chartHoverColors.push("#FF4757");
     chartLabels.push("Withdrawn Funds");
   }
@@ -49,6 +49,16 @@ const WalletChart = ({ balance, withdrawnFunds }) => {
   // Options de configuration pour le graphique
   const options = {
     plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding: 20,
+          boxWidth: 15,
+          font: {
+            size: 14
+          }
+        }
+      },
       tooltip: {
         callbacks: {
            // Personnalisation de l'affichage des tooltips
@@ -69,10 +79,11 @@ const WalletChart = ({ balance, withdrawnFunds }) => {
         },
       },
     },
+    maintainAspectRatio: false,
   };
 
   return (
-    <div style={{ width: "300px", height: "300px", margin: "20px auto" }}>
+    <div className="w-full h-64 md:h-80 lg:h-96 my-8">
       <Doughnut data={data} options={options} />
     </div>
   );
